@@ -11,20 +11,21 @@ const Recommends = () => {
             .then((data) => {
                 const chefRecommends = data.filter(
                     (item) => item.category === "popular"
-                );
+                ).slice(0, 3)
                 setRecommendation(chefRecommends);
+                
             });
     }, []);
 
     return (
         <div>
-            <section className="mb-12">
+            <section className="">
                 <SectionTitle
                     heading={"CHEF RECOMMENDS"}
                     subHeading={"---Should Try---"}
                 ></SectionTitle>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 items-center justify-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 ">
                     {recommendation ? (
                         recommendation.map((single) => (
                             <RecommendCard

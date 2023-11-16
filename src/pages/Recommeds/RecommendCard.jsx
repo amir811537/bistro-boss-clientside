@@ -1,27 +1,23 @@
+/* eslint-disable react/prop-types */
 
-const RecommendCard = ({single}) => {
-    const{image,name,recipe}=single;
+
+const RecommendCard = ({ single }) => {
+    const { image, name, recipe } = single;
+
     return (
-        <div className="relative flex max-w-[24rem] flex-col bg-white bg-clip-border text-gray-700 shadow-md">
-        <div className="relative m-0 overflow-hidden text-gray-700 bg-transparent rounded-none shadow-none bg-clip-border">
-          <img
-            src={image}
-            alt="ui/ux review check"
-          />
+        <div className="card w-full md:w-96 bg-base-100 shadow-xl">
+            <figure>
+                <img className="w-full h-48 object-cover" src={image} alt="Shoes" />
+            </figure>
+            <div className="card-body p-4">
+                <h2 className="card-title text-lg md:text-xl lg:text-2xl">{name}</h2>
+                <p className="text-sm md:text-base">{recipe}</p>
+                <div className="card-actions justify-center mt-4">
+                    <button className="btn border-orange-400 text-orange-400 bg-[#E8E8E8] uppercase border-0 border-b-4  mt-4 hover:bg-[#1F2937]">add to cart</button>
+   
+                </div>
+            </div>
         </div>
-        <div className="p-6 text-center">
-          <h4 className="block  font-sans text-2xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
-       {name}
-          </h4>
-          <p className="block mt-3 font-sans text-xl antialiased font-normal leading-relaxed text-gray-700">
-           {recipe}
-          </p>
-        </div>
-<div className="py-3 pb-4 ">
-<button className="btn  text-[#BB8506] flex items-center justify-center mx-auto  bg-[#E8E8E8] w-1/2 hover:btn-neutral"> Add to cart</button>
-
-    </div>       
-      </div>
     );
 };
 
