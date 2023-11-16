@@ -1,12 +1,12 @@
 import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
-import useMenu from "../../../Hooks/UseMenu";
 import MenuItem from "../../Shared/MenuItem";
-
+import useMenu from './../../../Hooks/UseMenu';
 
 const PopularMenu = () => {
 const [menu]=useMenu();
-const popular =menu.filter(item=>item.categoy==="popular");
-
+// console.log(menu)
+const popular =menu.filter(item=>item.category==="popular");
+// console.log(popular)
 
   // const [menu, setMenu] = useState();
 
