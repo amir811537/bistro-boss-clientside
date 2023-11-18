@@ -4,6 +4,7 @@ import Cover from "../../Shared/Cover/Cover";
 import MenuItem from "../../Shared/MenuItem";
 
 const MenuCategoy = ({items,title,img}) => {
+  console.log(title)
     return (
  <div className="pt-8">
     { title && <Cover img={img} title={title}></Cover>}
@@ -18,7 +19,7 @@ const MenuCategoy = ({items,title,img}) => {
           )}
         </div>
   <Link to={`/order/${title}`}>
-  <button className="btn border-orange-400 text-orange-400
+  <button className="btn flex items-center mx-auto border-orange-400 text-orange-400
          bg-[#E8E8E8] uppercase border-0 border-b-4  mt-4 hover:bg-[#1F2937]">Order now</button>
   </Link>
 
