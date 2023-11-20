@@ -1,4 +1,8 @@
 import { useContext, useEffect, useState } from "react";
+import "./login.css";
+
+import { FcGoogle } from "react-icons/fc";
+import loginimg from "../../assets/others/loginimg11.png";
 import {
   loadCaptchaEnginge,
   LoadCanvasTemplate,
@@ -10,13 +14,13 @@ import { Helmet } from "react-helmet-async";
 import Swal from "sweetalert2";
 
 const Login = () => {
-  const { singnIn } = useContext(AuthContext);
+  const { singnIn,googleSignin } = useContext(AuthContext);
 
   const [disable, setDisable] = useState(true);
 
-  const navigate =useNavigate();
-  const location =useLocation();
-  const from =location.state?.from?.pathname || '/'
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const handelCaptcha = (e) => {
     const user_capCha_value = e.target.value;
@@ -59,9 +63,24 @@ const Login = () => {
           `,
         },
       });
-      navigate(from,{replace:true});
+      navigate(from, { replace: true });
     });
   };
+
+  const handelGoogle = () => {
+    googleSignin().then((result) => {
+      console.log(result);
+      Swal.fire({
+        icon: "success",
+        title: "Login success",
+        showConfirmButton: false,
+        timer: 3000,
+      });
+      navigate(location?.state ? location.state : "/");
+
+    });
+};
+
 
   return (
     <>
@@ -69,19 +88,15 @@ const Login = () => {
         <title>Bistro Boss | Login</title>
       </Helmet>
 
-      <div className="hero min-h-screen bg-base-200">
-        <div className="hero-content flex-col lg:flex-row-reverse">
-          <div className="text-center w-1/2 lg:text-left">
-            <h1 className="text-5xl font-bold">Login now!</h1>
-            <p className="py-6">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
-            </p>
+      <div className="imgofbg hero min-h-screen">
+        <div className="hero-content shadow-2xl flex-col lg:flex-row-reverse">
+          <div className="hidden lg:block w-1/2">
+            <img src={loginimg} alt="" className="w-full h-full object-cover" />
           </div>
-          <div className="card  md:w-1/2 max-w-sm shadow-2xl bg-base-100">
+          <div className="card  md:w-1/2 max-w-sm  ">
             <form onSubmit={handelLogin} className="card-body">
               <div className="form-control">
+                <h1 className="text-4xl text-center font-bold">Login </h1>
                 <label className="label">
                   <span className="label-text">Email</span>
                 </label>
@@ -104,11 +119,6 @@ const Login = () => {
                   className="input input-bordered"
                   required
                 />
-                <label className="label">
-                  <a href="#" className="label-text-alt link link-hover">
-                    Forgot password?
-                  </a>
-                </label>
               </div>
               <div className="form-control">
                 <label className="label">
@@ -121,23 +131,27 @@ const Login = () => {
                   className="input input-bordered"
                   required
                 />
-              
               </div>
               <div className="form-control mt-6">
                 <input
                   disabled={disable}
-                  className="btn btn-primary"
+                  className="btn text-white bg-[#D1a054B3]"
                   type="submit"
                   value="Login"
                 ></input>
               </div>
               <Link to="/register">
                 {" "}
-                <p className="text-center">
-                  New here create an account !{" "}
-                  <span className="text-xl">Register</span>
+                <p className="text-center text-[#D1a054]">
+                  New here? Create a New Account!
                 </p>
               </Link>
+              <p className="text-center text-[#444]"> Or sign in with </p>
+
+              <button onClick={handelGoogle} className="felx items-center justify-center text-center text-5xl mx-auto">
+                {" "}
+                <FcGoogle />
+              </button>
             </form>
           </div>
         </div>
