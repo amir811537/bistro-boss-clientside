@@ -4,9 +4,12 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Swal from "sweetalert2";
+import regsterimg from "../../assets/others/loginimg11.png";
+import { FcGoogle } from "react-icons/fc";
+
 
 const Register = () => {
-  const { createUser,updateUserProfile } = useContext(AuthContext);
+  const { googleSignin,createUser,updateUserProfile } = useContext(AuthContext);
 
   const {
     register,
@@ -36,6 +39,26 @@ navigate('/');
     });
   };
 
+
+
+  const handelGoogle = () => {
+    googleSignin().then((result) => {
+      console.log(result);
+      Swal.fire({
+        icon: "success",
+        title: "Login success",
+        showConfirmButton: false,
+        timer: 3000,
+      });
+      navigate(location?.state ? location.state : "/");
+
+    });
+};
+
+
+
+
+
   //   console.log(watch('jsdkjdgk'))
 
   return (
@@ -44,19 +67,18 @@ navigate('/');
         <title>Bistro Boss | Register</title>
       </Helmet>
 
-      <div className="hero min-h-screen bg-base-200">
-        <div className="hero-content flex-col lg:flex-row-reverse">
+      <div className="hero imgofbg min-h-screen ">
+        <div className="hero-content shadow-2xl flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
-            <h1 className="text-5xl font-bold">Login now!</h1>
-            <p className="py-6">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
-            </p>
+            <img src={regsterimg} className="py-6">
+              
+            </img>
           </div>
-          <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+          <div className="card shrink-0 w-full max-w-sm">
             <form onSubmit={handleSubmit(onSubmit)} className="card-body">
               <div className="form-control">
+              <h1 className="text-4xl text-center font-bold">Register</h1>
+
                 <label className="label">
                   <span className="label-text">Name</span>
                 </label>
@@ -71,7 +93,7 @@ navigate('/');
                   <span className="text-red-600">Name is required</span>
                 )}
               </div>
-              <div className="form-control">
+              {/* <div className="form-control">
                 <label className="label">
                   <span className="label-text">Photo URL</span>
                 </label>
@@ -85,7 +107,7 @@ navigate('/');
                 {errors.PhotoURL && (
                   <span className="text-red-600">PhotoURL is required</span>
                 )}
-              </div>
+              </div> */}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Email</span>
@@ -136,25 +158,25 @@ navigate('/');
                   </p>
                 )}
 
-                <label className="label">
-                  <a href="#" className="label-text-alt link link-hover">
-                    Forgot password?
-                  </a>
-                </label>
               </div>
               <div className="form-control mt-6">
                 <input
-                  className="btn btn-primary"
+                  className="btn text-white bg-[#D1a054B3]"
                   type="submit"
                   value="Register Now"
                 />
               </div>
               <Link to="/login">
-                <p>
-                  alreay have an account ! please{" "}
-                  <span className="text-xl"> Login</span>
-                </p>
+                {" "}
+                <p className="text-center text-[#D1a054]">
+                Already registered? Go to login</p>
               </Link>
+              <p className="text-center text-[#444]"> Or sign in with </p>
+
+              <button onClick={handelGoogle} className="felx items-center justify-center text-center text-5xl mx-auto">
+                {" "}
+                <FcGoogle />
+              </button>
             </form>
           </div>
         </div>
