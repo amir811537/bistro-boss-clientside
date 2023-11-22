@@ -21,7 +21,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-  console.log('state of the location login page ',location.state)
+  // console.log('state of the location login page ',location.state)
 
   const handelCaptcha = (e) => {
     const user_capCha_value = e.target.value;
