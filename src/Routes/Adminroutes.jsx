@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
 import { Navigate, useLocation } from "react-router-dom";
 import useAdmin from "../Hooks/useAdmin";
 import useAuth from "../Hooks/useAuth";
 
-const Adminroutes = (children) => {
+const Adminroutes = ({children}) => {
 const [isAdmin,isAdminLoading]=useAdmin();
-const [user,loading]=useAuth();
+const {user,loading}=useAuth();
 const location =useLocation();
 
 
