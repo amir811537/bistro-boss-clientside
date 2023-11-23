@@ -70,7 +70,7 @@ const Login = () => {
 
   const handelGoogle = () => {
     googleSignin().then((result) => {
-      console.log(result);
+      // console.log(result);
       Swal.fire({
         icon: "success",
         title: "Login success",

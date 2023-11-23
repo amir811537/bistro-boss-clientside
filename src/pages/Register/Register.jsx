@@ -6,58 +6,72 @@ import { AuthContext } from "../../Provider/AuthProvider";
 import Swal from "sweetalert2";
 import regsterimg from "../../assets/others/loginimg11.png";
 import { FcGoogle } from "react-icons/fc";
-
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
 const Register = () => {
-  const { googleSignin,createUser,updateUserProfile } = useContext(AuthContext);
+  const { googleSignin, createUser, updateUserProfile } =
+    useContext(AuthContext);
+  const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
 
   const {
     register,
     handleSubmit,
-reset,
+    reset,
     formState: { errors },
   } = useForm();
-const navigate =useNavigate();
+
   const onSubmit = (data) => {
-    console.log(data);
+    // console.log(data);
     createUser(data.email, data.password).then((result) => {
       const loggedUser = result.user;
       console.log(loggedUser);
-      updateUserProfile(data.name,data.PhotoURL)
-      .then(()=>{
-console.log('user profile info is updated')
-reset();
-Swal.fire({
-  position:"top-start",
-  icon:'success',
-  title:'register successful',
-  timer: 2000
-})
-navigate('/');
-      })
-      .catch(error=>console.log(error))
+      updateUserProfile(data.name, data.PhotoURL)
+        .then(() => {
+          // create user entry in data base
+          const userinfo = {
+            name: data.name,
+            email: data.email,
+          };
+          axiosPublic.post("/users", userinfo).then((res) => {
+            if (res.data.insertedId) {
+              console.log("user added a data base ");
+              reset();
+              Swal.fire({
+                position: "top-start",
+                icon: "success",
+                title: "register successful",
+                timer: 2000,
+              });
+              navigate("/");
+            }
+          });
+        })
+        .catch((error) => console.log(error));
     });
   };
 
-
-
   const handelGoogle = () => {
     googleSignin().then((result) => {
-      console.log(result);
-      Swal.fire({
-        icon: "success",
-        title: "Login success",
-        showConfirmButton: false,
-        timer: 3000,
+      // console.log("=============fhjakf================>", result.user);
+      const userInfo = {
+        email: result.user?.email,
+        name: result.user?.displayName,
+      };
+      axiosPublic.post("/users", userInfo)
+      .then((res) => {
+        console.log("=======fhdsfhjfh",res.data);
+        navigate('/')
       });
-      navigate(location?.state ? location.state : "/");
-
+      // Swal.fire({
+      //   icon: "success",
+      //   title: "Login success",
+      //   showConfirmButton: false,
+      //   timer: 3000,
+      // });
+      // navigate(location?.state ? location.state : "/");
     });
-};
-
-
-
-
+  };
 
   //   console.log(watch('jsdkjdgk'))
 
@@ -70,14 +84,12 @@ navigate('/');
       <div className="hero imgofbg min-h-screen ">
         <div className="hero-content shadow-2xl flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
-            <img src={regsterimg} className="py-6">
-              
-            </img>
+            <img src={regsterimg} className="py-6"></img>
           </div>
           <div className="card shrink-0 w-full max-w-sm">
             <form onSubmit={handleSubmit(onSubmit)} className="card-body">
               <div className="form-control">
-              <h1 className="text-4xl text-center font-bold">Register</h1>
+                <h1 className="text-4xl text-center font-bold">Register</h1>
 
                 <label className="label">
                   <span className="label-text">Name</span>
@@ -157,7 +169,6 @@ navigate('/');
                     password must be less then 20 is charthers
                   </p>
                 )}
-
               </div>
               <div className="form-control mt-6">
                 <input
@@ -169,11 +180,15 @@ navigate('/');
               <Link to="/login">
                 {" "}
                 <p className="text-center text-[#D1a054]">
-                Already registered? Go to login</p>
+                  Already registered? Go to login
+                </p>
               </Link>
               <p className="text-center text-[#444]"> Or sign in with </p>
 
-              <button onClick={handelGoogle} className="felx items-center justify-center text-center text-5xl mx-auto">
+              <button
+                onClick={handelGoogle}
+                className="felx items-center justify-center text-center text-5xl mx-auto"
+              >
                 {" "}
                 <FcGoogle />
               </button>

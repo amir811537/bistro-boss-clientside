@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { createContext } from "react";
 
@@ -12,6 +13,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import app from "../firebase/firebase.config";
+import useAxiosPublic from "../Hooks/useAxiosPublic";
 
 const auth = getAuth(app);
 
@@ -20,6 +22,7 @@ export const AuthContext = createContext(null);
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const axiosPublics=useAxiosPublic();
 
   const createUser = (email, password) => {
     setLoading(true);
@@ -53,13 +56,26 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubcribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      console.log("=========>>", currentUser);
+if(currentUser){
+  const userinfo={email:currentUser.email}
+  // get token and store clintside
+axiosPublics.post('/jwt',userinfo)
+.then(res=>{
+  if(res.data.token){
+    localStorage.setItem('access-token',res.data.token)
+  }
+})
+
+}else{
+  // remove token (if token store in clinet side )
+localStorage.removeItem('access-token');
+}
       setLoading(false);
     });
     return () => {
       return unsubcribe();
     };
-  }, []);
+  }, [axiosPublics]);
 
   const authInfo = {
     user,
