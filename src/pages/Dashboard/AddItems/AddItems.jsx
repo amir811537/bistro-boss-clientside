@@ -2,23 +2,51 @@ import { useForm } from "react-hook-form";
 import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
 import { FaUtensils } from "react-icons/fa";
 import useAxiosPublic from "../../../Hooks/useAxiosPublic";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 const image_hostion_key= import.meta.env.VITE_IMAGE_HOSTING_KEY;
-const image_hostion_api=`https://api.imgbb.com/1/upload?key=${image_hostion_key};`
+console.log("api key imgbb===>",image_hostion_key)
+// const image_hostion_api=`https://api.imgbb.com/1/upload?key=${image_hostion_key};`
+const image_hostion_api="https://api.imgbb.com/1/upload?key=1d6fdf8c502424c419510b9f0a67a7f8";
+console.log(image_hostion_api)
+
 const AddItems = () => {
-
-const axiosPublic=useAxiosPublic()
-
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit,reset } = useForm();
+  const axiosPublic=useAxiosPublic();
+  const axiousSecure =useAxiosSecure()
   const onSubmit = async(data) => {
+    console.log(data)
     const imageFile ={image:data.image[0]}
     const res=await axiosPublic.post(image_hostion_api,imageFile,{
         headers:{
             'Content-Type':'multipart/form-data'
         }
     })
-    console.log(res.data)
+    if(res.data.success){
+      const menuitem={
+        name:data.name,
+        category:data.category,
+        price:parseFloat(data.price),
+        recipe: data.recipe,
+        image:res.data.data.display_url
+      }
+      // 
+      const menuRes =await axiousSecure.post('/menu',menuitem);
+      console.log(menuRes.data)
+      if(menuRes.data.insertedId){
+        reset()
+        Swal.fire({
+          position: "top-center",
+          icon: "success",
+          title: `${data.name} is added to the menu.`,
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+    }
+    console.log('with image url',res.data)
     
-    console.log(data)
+    // console.log(data)
 
 };
 //   image upload to imagebb and then get an url
